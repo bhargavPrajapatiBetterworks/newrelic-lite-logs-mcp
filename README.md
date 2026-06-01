@@ -77,7 +77,30 @@ export NEW_RELIC_COOKIE=""
         "NR_MEMORY_BANK_PATH": "${workspaceFolder}/.newrelic/memory-bank.json"
       }
     }
+  },
+  "inputs": [
+  {
+   "id": "newrelic-account-id",
+   "type": "promptString",
+   "description": "New Relic Account ID — get from https://one.newrelic.com/ → Account settings → API keys",
+   "password": true,
+   "default": "${env:NEW_RELIC_ACCOUNT_ID}"
+  },
+  {
+   "id": "newrelic-api-key",
+   "type": "promptString",
+   "description": "New Relic API key — get from https://one.newrelic.com/ → Account settings → API keys",
+   "password": true,
+   "default": "${env:NEW_RELIC_API_KEY}"
+  },
+  {
+   "id": "newrelic-cookie",
+   "type": "promptString",
+   "description": "New Relic cookie — get from browser's network tab when logged in to New Relic",
+   "password": true,
+   "default": "${env:NEW_RELIC_COOKIE}"
   }
+ ]
 }
 ```
 
