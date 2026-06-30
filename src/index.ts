@@ -147,7 +147,7 @@ function textResult(payload: unknown) {
     content: [
       {
         type: "text" as const,
-        text: JSON.stringify(payload, null, 2),
+        text: JSON.stringify(payload),
       },
     ],
   };
@@ -308,6 +308,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ["query"],
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     {
       name: "build_memory_bank",
@@ -351,6 +357,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           },
         },
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     {
       name: "dry_run_query",
@@ -364,6 +376,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           limit: { type: "number", maximum: MAX_LIMIT },
         },
         required: ["query"],
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
       },
     },
     {
@@ -383,6 +401,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ["nrql"],
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     {
       name: "search_entities",
@@ -400,6 +424,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           limit: { type: "number", maximum: 200, description: "Max entities to return (default 25)." },
         },
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     {
       name: "get_service_health_summary",
@@ -416,6 +446,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ["entityName"],
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+      },
     },
     {
       name: "list_active_incidents",
@@ -430,6 +465,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           since: { type: "string", description: "How far back to look (default: 24 hours ago)." },
           limit: { type: "number", maximum: 200, description: "Max incidents to return (default 50)." },
         },
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
       },
     },
     {
@@ -450,6 +490,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           accountId: { type: "number", description: "Override the default account ID." },
         },
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     {
       name: "get_top_errors",
@@ -466,6 +512,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           limit: { type: "number", maximum: 100, description: "Max error classes to return (default 20)." },
         },
         required: ["entityName"],
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
       },
     },
     {
@@ -484,6 +535,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ["entityName"],
       },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+      },
     },
     {
       name: "investigate_service_issue",
@@ -501,6 +557,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
           limit: { type: "number", maximum: 50, description: "Max entries per data section (default 10)." },
         },
         required: ["entityName"],
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
       },
     },
   ],
