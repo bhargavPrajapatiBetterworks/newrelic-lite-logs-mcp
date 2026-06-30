@@ -295,16 +295,22 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
     {
       name: "search_logs",
-      description: "Run a read-only NRQL query for logs with time bounds and pagination.",
+      description:
+        "**LOG-SPECIFIC query tool** with memory bank routing, pagination, and diagnostics. " +
+        "Optimized exclusively for log exploration and log event queries (FROM Log or custom log tables). " +
+        "Features: auto-routes 'FROM Log' to custom tables in memory bank, enforces time bounds, " +
+        "cursor-based pagination (pageToken), returns diagnostics on zero results, includes account context and performance metrics. " +
+        "Use ONLY for log queries. For any other NRQL query type (metrics, transactions, etc.), use run_nrql_query instead.",
+
       inputSchema: {
         type: "object",
         properties: {
-          query: { type: "string" },
-          accountId: { type: "number" },
-          since: { type: "string" },
-          until: { type: "string" },
-          limit: { type: "number", maximum: MAX_LIMIT },
-          pageToken: { type: "string" },
+          query: { type: "string", description: "NRQL query targeting log events (e.g. 'SELECT * FROM Log WHERE level = \"ERROR\"'). Must use FROM Log or custom log table name." },
+          accountId: { type: "number", description: "New Relic account ID to query. Overrides default configured account." },
+          since: { type: "string", description: "Start of time window (e.g. '1 hour ago', '2026-06-30T10:00:00Z'). Required unless included in query." },
+          until: { type: "string", description: "End of time window (e.g. 'now', '2026-06-30T12:00:00Z'). Optional." },
+          limit: { type: "number", maximum: MAX_LIMIT, description: "Max rows to return per page (default 200, max 5000)." },
+          pageToken: { type: "string", description: "Cursor token for fetching next page. Use nextPageToken from previous response." },
         },
         required: ["query"],
       },
@@ -387,9 +393,12 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "run_nrql_query",
       description:
-        "Execute a read-only NRQL query for any New Relic event type (Transaction, TransactionError, Log, Metric, etc.). " +
-        "Unlike search_logs, this does not enforce time bounds or route through the memory bank. " +
-        "Use for custom aggregations, metric comparisons, and event types beyond logs.",
+        "**GENERAL-PURPOSE NRQL query tool** for any New Relic event type (Transaction, TransactionError, Metric, ServiceLevel, etc.). " +
+        "NOT specialized for logs—use search_logs for log queries instead. " +
+        "This tool: does NOT route through memory bank, does NOT enforce time bounds (you control SINCE/UNTIL), " +
+        "does NOT support pagination, returns minimal metadata. " +
+        "Use for: cross-event-type queries, metrics, transactions, custom aggregations, and queries where you need direct NRQL control.",
+
       inputSchema: {
         type: "object",
         properties: {
